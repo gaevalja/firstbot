@@ -31,7 +31,7 @@ async def startGettingMoney(ctx):
         dt = datetime.datetime.now()
         
 
-app.run('OTg1MTEzNzM5MDcyMjcwMzM3.GpGIfe.6HSOe2QM84FlMLwBbUOdIBsTxnWj9hQDymSdYs')
+app.run(myToken)
 
 
 
