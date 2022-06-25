@@ -1,10 +1,11 @@
 import discord
 from discord.ext import commands
 import datetime
+import os
 
 
 app = commands.Bot(command_prefix='/')
-
+TOKEN = os.environ.get('BOT_TOKEN')
 
 
 @app.event
@@ -31,7 +32,7 @@ async def startGettingMoney(ctx):
         dt = datetime.datetime.now()
         
 
-app.run(myToken)
+app.run(TOKEN)
 
 
 
