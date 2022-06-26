@@ -6,6 +6,9 @@ from selenium.webdriver.common.keys import Keys
 
 #
 options = webdriver.ChromeOptions()
+options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+options.add_argument("--headless")
+options.add_argument("--disable-gpu")
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 #
 
@@ -26,7 +29,7 @@ async def hello(ctx):
 @app.command()
 async def find(ctx, user_input):
     #
-    driver = webdriver.Chrome('chromedriver.exe',options=options)
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
     driver.implicitly_wait(3)
     driver.get('https://ko.dict.naver.com/#/main' )
     #
