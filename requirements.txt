@@ -1,1 +1,2 @@
 discord.py
+selenium==3.141.0

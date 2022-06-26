@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-import datetime
 import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -27,7 +26,7 @@ async def hello(ctx):
 @app.command()
 async def find(ctx, user_input):
     #
-    driver = webdriver.Chrome('C://JUNGz_KOR/chromedriver.exe',options=options)
+    driver = webdriver.Chrome('chromedriver.exe',options=options)
     driver.implicitly_wait(3)
     driver.get('https://ko.dict.naver.com/#/main' )
     #
@@ -44,7 +43,7 @@ async def find(ctx, user_input):
     driver.quit()   
     #
     
-TOKEN = 'OTg1MTEzNzM5MDcyMjcwMzM3.GUNEbi.9xgnKXo_xfyvzOM9OIQhBr82aqrYHwMY62SybU'
+
 app.run(TOKEN)
 
 # from selenium import webdriver
