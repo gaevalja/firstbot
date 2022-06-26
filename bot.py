@@ -28,8 +28,10 @@ async def hello(ctx):
 
 @app.command()
 async def find(ctx, user_input):
+    await ctx.send("1")####
     #
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
+    await ctx.send("2")####
     driver.implicitly_wait(3)
     driver.get('https://ko.dict.naver.com/#/main' )
     #
