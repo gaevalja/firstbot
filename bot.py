@@ -22,7 +22,7 @@ async def startGettingMoney(ctx):
     n = 0
     dt = datetime.datetime.now()
     now_min = dt.minute
-    while 1:
+    while n<10:
         if now_min != dt.minute:
             
             now_min = dt.minute
@@ -34,6 +34,24 @@ async def startGettingMoney(ctx):
 
 app.run(TOKEN)
 
+# from selenium import webdriver
+# from selenium.webdriver.common.keys import Keys
+
+# #
+# options = webdriver.ChromeOptions()
+# options.add_experimental_option('excludeSwitches', ['enable-logging'])
+# #
+# driver = webdriver.Chrome('chromedriver.exe',options=options)
+# driver.implicitly_wait(3)
+# driver.get('https://ko.dict.naver.com/#/main' )
+
+# input_box = driver.find_element_by_css_selector('#ac_input')
+# input_box.send_keys('애미')
+# input_box.send_keys(Keys.ENTER)
+
+# word = driver.find_element_by_css_selector('#searchPage_entry > div > div:nth-child(1) > ul > li:nth-child(1) > p').text
+# print(word)
+# driver.quit()
 
 
 
