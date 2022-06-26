@@ -29,9 +29,9 @@ async def hello(ctx):
 
 @app.command()
 async def find(ctx, user_input):
-    await ctx.send("1")####
+    await ctx.send(user_input)####
     #
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=options)
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=options)
     await ctx.send("2")####
     driver.implicitly_wait(5)
     driver.get('https://ko.dict.naver.com/#/main' )
