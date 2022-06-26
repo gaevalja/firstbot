@@ -30,7 +30,7 @@ async def hello(ctx):
     await ctx.send("me too")
 
 @app.command()
-async def help(ctx):
+async def helpme(ctx):
     await ctx.send("되긋냐")
 
 @app.command()
