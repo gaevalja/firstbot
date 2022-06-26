@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 options = webdriver.ChromeOptions()
 options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 options.add_argument("--headless")
+options.add_argument('window-size=1920x1080')
 options.add_argument("--disable-gpu")
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 #
@@ -32,7 +33,7 @@ async def find(ctx, user_input):
     #
     driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=options)
     await ctx.send("2")####
-    driver.implicitly_wait(3)
+    driver.implicitly_wait(5)
     driver.get('https://ko.dict.naver.com/#/main' )
     #
     input_box = driver.find_element_by_css_selector('#ac_input')
@@ -41,7 +42,6 @@ async def find(ctx, user_input):
     #
     try:
         word = driver.find_element_by_css_selector('#searchPage_entry > div > div:nth-child(1) > ul > li:nth-child(1) > p').text
-        print(word)
         await ctx.send(word)
     except:
         await ctx.send("응 ㅇㄴㅇ")
