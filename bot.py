@@ -11,7 +11,7 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 #
 
 
-app = commands.Bot(command_prefix='plz')
+app = commands.Bot(command_prefix='/')
 TOKEN = os.environ.get('BOT_TOKEN')
 
 
@@ -20,12 +20,14 @@ async def on_ready():
     print('Done')
     await app.change_presence(status=discord.Status.online, activity=None)
 
-
+@app.command()
+async def hello(ctx):
+    await ctx.send("me too")
 
 @app.command()
 async def find(ctx, user_input):
     #
-    driver = webdriver.Chrome('chromedriver.exe',options=options)
+    driver = webdriver.Chrome('C://JUNGz_KOR/chromedriver.exe',options=options)
     driver.implicitly_wait(3)
     driver.get('https://ko.dict.naver.com/#/main' )
     #
@@ -33,11 +35,16 @@ async def find(ctx, user_input):
     input_box.send_keys(user_input)
     input_box.send_keys(Keys.ENTER)
     #
-    word = driver.find_element_by_css_selector('#searchPage_entry > div > div:nth-child(1) > ul > li:nth-child(1) > p').text
-    print(word)
+    try:
+        word = driver.find_element_by_css_selector('#searchPage_entry > div > div:nth-child(1) > ul > li:nth-child(1) > p').text
+        print(word)
+        await ctx.send(word)
+    except:
+        await ctx.send("응 ㅇㄴㅇ")
     driver.quit()   
     #
-    await ctx.send("'",word+"'"+' 라는 뜻 ㅋ')
+    
+TOKEN = 'OTg1MTEzNzM5MDcyMjcwMzM3.GUNEbi.9xgnKXo_xfyvzOM9OIQhBr82aqrYHwMY62SybU'
 app.run(TOKEN)
 
 # from selenium import webdriver
@@ -52,7 +59,7 @@ app.run(TOKEN)
 # driver.get('https://ko.dict.naver.com/#/main' )
 
 # input_box = driver.find_element_by_css_selector('#ac_input')
-# input_box.send_keys('애미')
+# input_box.send_keys('나무')
 # input_box.send_keys(Keys.ENTER)
 
 # word = driver.find_element_by_css_selector('#searchPage_entry > div > div:nth-child(1) > ul > li:nth-child(1) > p').text
