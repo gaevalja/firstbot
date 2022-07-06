@@ -8,7 +8,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import string
 import time
 import header
-from multipledispatch import dispatch
 from itertools import cycle
 #heroku환경 여부
 isOnHeroku = True
@@ -201,5 +200,5 @@ async def 운동(ctx, workout, workout_cnt=None):
     
         
 #####            
-app.run(TOKEN)
+#app.run(TOKEN)
 #####
