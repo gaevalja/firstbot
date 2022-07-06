@@ -1,20 +1,21 @@
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import string
 import time
-
-
+import header
+from multipledispatch import dispatch
+from itertools import cycle
 #heroku환경 여부
 isOnHeroku = True
 #if isOnHeroku:
 TOKEN = os.environ.get('BOT_TOKEN')
 # else:
-
+date = int(time.strftime('%d', time.localtime(time.time())))
 
 #옵션 설정
 options = webdriver.ChromeOptions()
@@ -36,31 +37,19 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 #명령접두사
 app = commands.Bot(command_prefix='/')
 
+playing = cycle(['코', '딩', '몽', '키'])
 #봇 등장 이벤트
 @app.event
 async def on_ready():
     print('Done')
     await app.change_presence(status=discord.Status.online, activity=None)
-
-
-badwords = ['ㅅㅂ', 'tq', '시발', '개객', 'ㅈㄴ', '개**', 'ㅆㅂ', 'Tq', 'lqkf', '개라석', '애가', 'ㅄ', 'ㅂㅅ', '병신', '븅신', '존나', '슈발']
-@app.event
-async def on_message(message):
-   for i in badwords: # Go through the list of bad words;
-        if i in message.content:
-            await message.delete()
-            await message.channel.send(f"{message.author.mention} 나쁜말감지")
-            app.dispatch('profanity', message, i)
-            return # So that it doesn't try to delete the message again, which will cause an error.
-        await app.process_commands(message)
-
+    await app.change_presence(activity=discord.Game(name="zzz"))
+    checkday.start()
 #명령어
 @app.command()
 async def hello(ctx):
     await ctx.send("me too")
     
-
-
 @app.command()
 async def find(ctx, user_input):
     #
@@ -144,7 +133,73 @@ async def 피파수수료계산(ctx,cash,topclass,pc):
         else:
             cashreturn= "{:,}".format((cash*0.6))
             await ctx.channel.send("수령 예상 금액은 약 %s BP 입니다." %cashreturn)
-            
+
+#header.init_workout_files()
+
+
+@tasks.loop(seconds=3)
+async def checkday():
+    await app.change_presence(activity=discord.Game(next(playing)))
+    if header.checkday(date):
+        for workout in header.workout_list.keys():
+            with open('textfile/'+workout+'_tmp.txt', 'w', encoding = 'utf-8') as file:
+                file.write('0')
+    return
+
+@app.command()  
+async def 운동(ctx, workout, workout_cnt=None):
+    if workout == 'check':
+        workoutlist = list()
+        cntlist = list()
+        for workout_ in header.workout_list:
+            with open('textfile/'+workout_+'_tmp.txt', 'r', encoding = 'utf-8') as file:
+                workoutlist.append(workout_)
+                cntlist.append(header.workout_list[workout_]-int(file.read()))
+        workoutlist_total = list()
+        cntlist_total = list()
+        for workout_ in header.workout_list:
+            with open('textfile/'+workout_+'_total.txt', 'r', encoding = 'utf-8') as file:
+                workoutlist_total.append(workout_)
+                cntlist_total.append(int(file.read()))
+                
+        await ctx.channel.send('-----------TODAY-----------')
+        cnt = 0
+        for i, j in zip(workoutlist, cntlist):
+            if j<=0:
+                cnt += 1
+                continue
+            await ctx.channel.send('%s은 %d개 더 하셔야 합니다.'%(i, j))
+        if cnt == 3:
+            await ctx.channel.send('오.운.완')
+        
+        await ctx.channel.send('-----------TOTAL-----------')
+        for i, j in zip(workoutlist_total, cntlist_total):
+            await ctx.channel.send('%s은 총 %d개 하셨습니다.'%(i, j))
+        return
+    if workout == 'list':
+        await ctx.channel.send('운동종류:목표개수 -> '+str(header.workout_list))
+        return
+    additional_message = ''
+    if workout not in header.workout_list:
+        await ctx.channel.send("운동이 등록되지 않았습니다. 운동 종류와 개수 등록을 원하시면 관리자 김성주에게 요청 하던가 말던가 해보셩 ㅋ")
+    elif int(workout_cnt) <= 0:
+        await ctx.channel.send("양수를 입력하세요 애야 ㅋ")
+    else:
+        with open('textfile/'+workout+'_tmp.txt', 'r', encoding = 'utf-8') as file:
+            tmp_cnt = int(file.read())
+            if tmp_cnt + int(workout_cnt) >= header.workout_list[workout]:
+                additional_message = ' 하루 목표치 '+str(header.workout_list[workout])+'개 를 달성하였습니다.'
+        with open('textfile/'+workout+'_tmp.txt', 'w', encoding = 'utf-8') as file:
+            file.write(str(tmp_cnt+int(workout_cnt)))
+        with open('textfile/'+workout+'_total.txt', 'r', encoding = 'utf-8') as file:
+            total_cnt = int(file.read())
+        with open('textfile/'+workout+'_total.txt', 'w', encoding = 'utf-8') as file:
+            total_cnt += int(workout_cnt)
+            file.write(str(total_cnt))
+        await ctx.channel.send('오늘 '+workout+' 을 '+str(tmp_cnt+int(workout_cnt))+'개 했습니다.'+additional_message)
+
+    
+        
 #####            
 app.run(TOKEN)
 #####
