@@ -200,5 +200,5 @@ async def 운동(ctx, workout, workout_cnt=None):
     
         
 #####            
-#app.run(TOKEN)
+app.run(TOKEN)
 #####
