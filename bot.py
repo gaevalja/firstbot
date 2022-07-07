@@ -137,7 +137,7 @@ async def 피파수수료계산(ctx,cash,topclass,pc):
 
 
 @tasks.loop(seconds=3)
-async def checkday():
+async def checkday(date):
     await app.change_presence(activity=discord.Game(next(playing)))
     if header.checkday(date):
         for workout in header.workout_list.keys():
